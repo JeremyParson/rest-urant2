@@ -1,6 +1,14 @@
 // setup environment variables
 require('dotenv').config()
 
+// DATABASE
+const mongoose = require('mongoose')
+const MONGO_URI = process.env.MONGO_URI
+mongoose.connect(MONGO_URI, {useNewUrlParser: true, useUnifiedTopology: true}, () => {
+    console.log(`connected to MongoDB at: ${MONGO_URI}`)
+})
+
+// Express
 const express = require('express')
 const app = express()
 
@@ -21,7 +29,7 @@ app.use(express.urlencoded({
 }))
 
 // Static
-app.use(express.static('public'))
+app.use('/static', express.static('public'))
 
 // Controllers
 app.use('/places', require('./controllers/placesController'))
@@ -38,5 +46,5 @@ app.get('*', (req, res) => {
 
 // Listen
 app.listen(process.env.PORT, () => {
-    console.log(`App started at ${process.env.PORT}.`)
+    console.log(`App started at port ${process.env.PORT}.`)
 })

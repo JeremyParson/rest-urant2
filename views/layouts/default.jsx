@@ -9,7 +9,7 @@ function Def(html) {
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
         ></link>
-        <link rel="stylesheet" href="style.css"></link>
+        <link rel="stylesheet" href="static/style.css"></link>
       </head>
       <body>
         <nav>

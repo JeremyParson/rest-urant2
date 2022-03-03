@@ -1,72 +1,74 @@
-// places data
-let placesData = require("../places");
+// PLACES DATA
+// MODEL
+const Place = require('../models/places')
 
 const express = require("express");
-const places = express.Router();
+const router = express.Router();
 
+// DATABASE
+const mongoose = require('mongoose')
+const db = mongoose
 // Index places
-places.get("/", (req, res) => {
-  res.render("places/index", { places: placesData });
+router.get("/", async (req, res) => {
+  const places = await Place.find()
+  res.render("places/index", { places });
 });
 
 // Get new place form
-places.get("/new", (req, res) => {
+router.get("/new", (req, res) => {
   res.render("places/new");
 });
 
 // New place
-places.post("/", (req, res) => {
-  console.log(req.body);
-  if (!req.body.pic) {
-    // Default image if one is not provided
-    req.body.pic = "http://placekitten.com/400/400";
+router.post("/", async (req, res) => {
+  try {
+    const newPlace = await Place.create(req.body)
+    console.log(newPlace)
+    res.status(301).redirect("/places");
+  } catch (err) {
+    console.log(err)
   }
-  if (!req.body.city) {
-    req.body.city = "Anytown";
-  }
-  if (!req.body.state) {
-    req.body.state = "USA";
-  }
-  placesData.push(req.body);
-  res.status(301).redirect("/places");
 });
 
-places.get("/:id", (req, res) => {
-  let id = Number(req.params.id);
-  if (isNaN(id)) {
+router.get("/:id", async (req, res) => {
+  try {
+    const place = await Place.findOne({_id: req.params.id})
+    res.render("places/show", place);
+  } catch (err) {
+    console.log(err)
     res.render("error404");
-  } else if (!placesData[id]) {
-    res.render("error404");
-  } else {
-    res.render("places/show", { place: placesData[id], id });
   }
 });
 
 // Delete place
-places.delete("/places/:id", (req, res) => {
-  let id = Number(req.params.id);
-  if (isNaN(id)) {
-    res.render("error404");
-  } else if (!placesData[id]) {
-    res.render("error404");
-  } else {
-    placesData.splice(id, 1);
+router.delete("/places/:id", async (req, res) => {
+  try {
+    const deletedPlace = await Place.deleteOne({_id: req.params.id})
     res.redirect("/places");
+  } catch (err) {
+    console.log(err)
   }
 });
 
 // Edit
-places.get('/:id/edit', (req, res) => {
-  let id = Number(req.params.id)
-  if (isNaN(id)) {
-      res.render('error404')
+router.get("/:id/edit", async (req, res) => {
+  try {
+    const place = await Place.findOne({_id: req.params.id})
+    res.render("places/edit", place);
+  } catch (err) {
+    console.log(err)
+    res.render("error404");
   }
-  else if (!placesData[id]) {
-      res.render('error404')
-  }
-  else {
-    res.render('places/edit', { place: placesData[id] })
-  }
-})
+});
 
-module.exports = places;
+router.put("/:id", async(req, res) => {
+  try {
+    const result = await Place.updateOne({_id: req.params.id}, req.body)
+    res.redirect(`/places/${req.params.id}`);
+  } catch (err) {
+    console.log(err)
+    res.render("error404");
+  }
+});
+
+module.exports = router;
