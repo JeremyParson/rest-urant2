@@ -32,6 +32,10 @@ function new_form() {
               required
             />
           </div>
+          <div className="form-group">
+            <label htmlFor="founded">Date Founded</label>
+            <input id="founded" name='founded' type="date"/>
+          </div>
           <input className="btn btn-primary" type="submit" value="Add Place" />
         </form>
       </main>

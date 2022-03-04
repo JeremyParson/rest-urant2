@@ -5,9 +5,6 @@ const Place = require('../models/places')
 const express = require("express");
 const router = express.Router();
 
-// DATABASE
-const mongoose = require('mongoose')
-const db = mongoose
 // Index places
 router.get("/", async (req, res) => {
   const places = await Place.find()
@@ -30,6 +27,7 @@ router.post("/", async (req, res) => {
   }
 });
 
+// 
 router.get("/:id", async (req, res) => {
   try {
     const place = await Place.findOne({_id: req.params.id})
@@ -43,7 +41,7 @@ router.get("/:id", async (req, res) => {
 // Delete place
 router.delete("/places/:id", async (req, res) => {
   try {
-    const deletedPlace = await Place.deleteOne({_id: req.params.id})
+    await Place.deleteOne({_id: req.params.id})
     res.redirect("/places");
   } catch (err) {
     console.log(err)

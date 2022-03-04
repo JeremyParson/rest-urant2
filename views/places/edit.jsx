@@ -16,15 +16,19 @@ function edit_form(data) {
           </div>
           <div className="form-group col-sm-6">
             <label htmlFor="name">City</label>
-            <input id="name" name="city" value={data.city}/>
+            <input id="city" name="city" value={data.city}/>
           </div>
           <div className="form-group col-sm-6">
             <label htmlFor="pic">State</label>
-            <input id="pic" name="state" value={data.state}/>
+            <input id="state" name="state" value={data.state}/>
           </div>
           <div className="form-group col-sm-6">
             <label htmlFor="pic">Cuisines</label>
-            <input id="pic" name="cuisines" value={data.cuisines}/>
+            <input id="cuisines" name="cuisines" value={data.cuisines}/>
+          </div>
+          <div className="form-group col-sm-6">
+            <label htmlFor="founded">Date Founded</label>
+            <input id="founded" name='founded' type="date" value={data.founded}/>
           </div>
           <input className="btn btn-primary" type="submit" value="Edit Place" />
         </div>
