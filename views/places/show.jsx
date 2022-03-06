@@ -1,22 +1,55 @@
 const React = require("react");
 const Def = require("../layouts/default");
 
-function show(data) {
+function show({ place }) {
+  let comments = <h3 className="inactive">No comments yet!</h3>;
+  if (place.comments.length) {
+    comments = place.comments.map((c) => {
+      return (
+        <div className="border">
+          <h2 className="rant">{c.rant ? "Rant! 😡" : "Rave! 😻"}</h2>
+          <h4>{c.content}</h4>
+          <h3>
+            <stong>- {c.author}</stong>
+          </h3>
+          <h4>Rating: {c.stars}</h4>
+        </div>
+      );
+    });
+  }
   return (
     <Def>
       <main>
-        <h1>{data.name}</h1>
+        <h1>{place.name}</h1>
         <h3>
-          Located in {data.city}, {data.state}
+          Located in {place.city}, {place.state}
         </h3>
-        <h3>{data.showEstablished()}</h3>
-        <h4>Serving {data.cuisines}</h4>
-        <a href={`/places/${data._id}/edit`} className="btn btn-warning">
+        <h3>{place.showEstablished()}</h3>
+        <h4>Serving {place.cuisines}</h4>
+        <a href={`/places/${place._id}/edit`} className="btn btn-warning">
           Edit
         </a>
-        <form method="POST" action={`/places/${data._id}?_method=DELETE`}>
+        <h2>Comments</h2>
+        {comments}
+        <form method="POST" action={`/places/${place._id}?_method=DELETE`}>
           <button type="submit" className="btn btn-danger">
             Delete
+          </button>
+        </form>
+        <form
+          method="POST"
+          action={(`/places/${place._id}/comment`)}
+        >
+          <label htmlFor="author">Author</label>
+          <input id="author" name="author" />
+          <label htmlFor="rant">Author</label>
+          <input id="rant" name="rant" type='checkbox'/>
+          <label htmlFor="author">stars</label>
+          <input id="stars" name="stars" />
+          <label htmlFor="content">Content</label>
+          <input id="content" name="content" />
+          <button type="submit" className="btn">
+            Comment
           </button>
         </form>
       </main>
